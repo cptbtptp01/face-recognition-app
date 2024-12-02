@@ -42,6 +42,7 @@ export class RecognitionService {
     if (!this.modelsLoaded) {
       const MODEL_URL = '/models';
       try {
+        this.updateDetectionStatus(false, 'Loading face detection models...', false);
         await Promise.all([
           faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
           faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
@@ -213,15 +214,17 @@ export class RecognitionService {
    * @private
    * @param {boolean} success - Indicates whether the detection was successful.
    * @param {string} message - A message describing the detection status.
+   * @param {boolean} isModelLoaded - Indicates whether the model was loaded.
    * @returns {void}
    */
-  private updateDetectionStatus(success: boolean, message: string) {
+  private updateDetectionStatus(success: boolean, message: string, isModelLoaded?: boolean) {
     this.store.dispatch(
       AppActions.setDetectionStatus({
         status: {
           success,
           message,
           timestamp: Date.now(),
+          isModelLoaded
         },
       })
     );
