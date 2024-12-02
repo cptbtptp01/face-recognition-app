@@ -1,6 +1,6 @@
 # Face Detection Web App
 
-This is a web application that uses the `face-api.js` library to perform real-time face detection and analysis on both video streams (from the user's webcam) and static images.
+This is a web application to perform real-time face detection and analysis on both video streams (from the user's webcam) and static images.
 
 ## Key Features:
 
