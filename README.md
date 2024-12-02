@@ -1,59 +1,60 @@
-# FacialRecognitionApp
+# Face Detection Web App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.2.
+This is a web application that uses the `face-api.js` library to perform real-time face detection and analysis on both video streams (from the user's webcam) and static images.
 
-## Development server
+## Key Features:
 
-To start a local development server, run:
+- **Face Detection**: The application can detect faces in both video and image input, and display bounding boxes around the detected faces.
+- **Facial Expression Recognition**: The application can recognize the dominant facial expression (e.g., happy, sad, angry) for each detected face and display the expression information.
+- **Age and Gender Estimation**: The application can estimate the age and gender of each detected face and display this information.
+- **Image Upload**: Users can upload images to the application and have them analyzed for face detection and analysis.
 
-```bash
-ng serve
-```
+## Tech Stack
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+The application is built using the following technologies:
 
-## Code scaffolding
+- **Angular**
+- **TypeScript**
+- **TenserFlow.js**
+- **face-api.js**
+- **NgRx**
+- **BootStrap**
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Getting Started
 
-```bash
-ng generate component component-name
-```
+To run the application locally, follow these steps:
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+1. Clone the repository:
 
-```bash
-ng generate --help
-```
+   ```
+   git clone https://github.com/cptbtptp01/face-recognition-app.git
+   ```
 
-## Building
+2. Navigate to the project directory:
 
-To build the project run:
+   ```
+   cd face-detection-web-app
+   ```
 
-```bash
-ng build
-```
+3. Install the dependencies:
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+   ```
+   npm install
+   ```
 
-## Running unit tests
+4. Start the server:
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+   ```
+   ng build --configuration production
+   npm start
+   ```
 
-```bash
-ng test
-```
+5. Open your web browser and navigate to `http://localhost:8080/` to see the application.
 
-## Running end-to-end tests
+## Usage
 
-For end-to-end (e2e) testing, run:
+When the application is running, you can:
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+1. Click the "Start Webcam" button to activate the webcam and start real-time face detection and analysis.
+2. Upload an image by clicking the "Upload Image" button and selecting a file.
+3. The application will display the detected faces, along with their facial expressions, age, and gender.

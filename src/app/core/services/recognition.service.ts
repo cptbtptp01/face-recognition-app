@@ -50,9 +50,9 @@ export class RecognitionService {
           faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
         ]);
         this.modelsLoaded = true;
-        this.updateDetectionStatus(true, 'Models loaded successfully');
+        this.updateDetectionStatus(true, 'Models loaded successfully', true);
       } catch (error) {
-        this.updateDetectionStatus(false, 'Failed to load face detection models');
+        this.updateDetectionStatus(false, 'Failed to load face detection models', false);
         throw error;
       }
     }
@@ -130,13 +130,13 @@ export class RecognitionService {
         .withFaceExpressions()
         .withAgeAndGender();
       if (detections.length === 0) {
-        this.updateDetectionStatus(false, 'No faces detected in the image');
+        this.updateDetectionStatus(false, 'No faces detected in the image', true);
         return [];
       }
-      this.updateDetectionStatus(true, `Detected ${detections.length} face(s)`);
+      this.updateDetectionStatus(true, `Detected ${detections.length} face(s)`, true);
       return detections;
     } catch (error) {
-      this.updateDetectionStatus(false, 'Error during face detection');
+      this.updateDetectionStatus(false, 'Error during face detection', true);
       console.error('Face detection error:', error);
       return [];
     }
