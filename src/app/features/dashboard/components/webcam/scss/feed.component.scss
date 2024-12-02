@@ -1,20 +1,18 @@
-@use 'bootstrap/scss/bootstrap' as bs;
+@use 'variables' as *;
 
 .webcam-container {
   @extend .mx-auto;
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 640px;
+  max-width: $webcam-max-width;
 }
 
 .feed-content {
-  @extend .position-relative;
-  @extend .rounded;
-  @extend .border;
+  @extend .position-relative, .rounded, .border;
   margin-bottom: 1rem;
   width: 100%;
-  min-height: 320px;
+  min-height: $webcam-min-height;
   background: var(--bs-light-bg-subtle);
   overflow: hidden;
 
@@ -35,21 +33,15 @@
   }
 
   canvas {
-    @extend .position-absolute;
-    @extend .top-0;
-    @extend .start-0;
+    @extend .position-absolute, .top-0, .start-0;
     width: 100%;
     height: 100%;
     pointer-events: none;
   }
 
   .placeholder {
-    @extend .d-flex;
-    @extend .align-items-center;
-    @extend .justify-content-center;
-    @extend .position-absolute;
-    @extend .top-0;
-    @extend .start-0;
+    @include flex-center;
+    @extend .position-absolute, .top-0, .start-0;
     width: 100%;
     height: 100%;
     background: var(--bs-light);
@@ -58,13 +50,11 @@
       @extend .text-secondary;
 
       i {
-        @extend .display-4;
-        @extend .mb-2;
+        @extend .display-4, .mb-2;
       }
 
       p {
-        @extend .text-muted;
-        @extend .mb-0;
+        @extend .text-muted, .mb-0;
         font-size: 0.9rem;
       }
     }
@@ -72,11 +62,9 @@
 }
 
 .detection-status {
-  @extend .alert;
-  @extend .d-flex;
-  @extend .align-items-center;
+  @extend .alert, .d-flex, .align-items-center;
   margin-bottom: 1rem;
-  min-width: 200px;
+  min-width: $status-min-width;
 
   .status-icon {
     @extend .me-2;
@@ -84,36 +72,25 @@
 }
 
 .webcam-controls {
-  @extend .d-flex;
-  @extend .gap-2;
-  @extend .justify-content-center;
+  @extend .d-flex, .flex-wrap, .justify-content-center;
+  gap: 0.5rem;
 
   .btn {
-    @extend .btn-lg;
-    min-width: 140px;
+    @extend .btn-lg, .w-auto;
     font-size: 1rem;
     align-items: center;
+
+    i {
+      @extend .me-2;
+    }
+
+    @include mobile {
+      font-size: 0.9rem;
+      padding: 0.5rem;
+    }
   }
 }
 
 .hidden {
   display: none !important;
-}
-
-@keyframes dots {
-  0% {
-    content: '';
-  }
-  25% {
-    content: '.';
-  }
-  50% {
-    content: '..';
-  }
-  75% {
-    content: '...';
-  }
-  100% {
-    content: '';
-  }
 }

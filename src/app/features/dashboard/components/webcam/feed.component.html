@@ -31,7 +31,7 @@
       [ngClass]="{
         'alert-success': status.success,
         'alert-warning': !status.isModelLoaded && !status.success,
-        'alert-danger': !status.success && status.isModelLoaded
+        'alert-danger': !status.success && status.isModelLoaded,
       }"
     >
       <span
@@ -39,7 +39,7 @@
         [ngClass]="{
           'bi bi-check-circle': status.success,
           'bi bi-hourglass-split': !status.isModelLoaded && !status.success,
-          'bi bi-exclamation-circle': !status.success && status.isModelLoaded
+          'bi bi-exclamation-circle': !status.success && status.isModelLoaded,
         }"
       ></span>
       {{ status.message }}

@@ -21,7 +21,7 @@ import { DetectionStatus } from '../../../../core/store/state/app.state';
   selector: 'app-feed',
   imports: [CommonModule],
   templateUrl: './feed.component.html',
-  styleUrl: './feed.component.scss',
+  styleUrl: './scss/feed.component.scss',
 })
 export class FeedComponent implements OnInit, OnDestroy {
   @ViewChild('video') video!: ElementRef<HTMLVideoElement>;

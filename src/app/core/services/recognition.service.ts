@@ -224,7 +224,7 @@ export class RecognitionService {
           success,
           message,
           timestamp: Date.now(),
-          isModelLoaded
+          isModelLoaded,
         },
       })
     );

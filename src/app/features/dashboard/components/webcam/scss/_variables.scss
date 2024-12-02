@@ -1,0 +1,18 @@
+@use 'bootstrap/scss/bootstrap' as bs;
+
+$webcam-max-width: 640px;
+$webcam-min-height: 320px;
+$mobile-breakpoint: 576px;
+$status-min-width: 200px;
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin mobile {
+  @media (max-width: $mobile-breakpoint) {
+    @content;
+  }
+}
