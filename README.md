@@ -15,7 +15,7 @@ The application is built using the following technologies:
 
 - **Angular**
 - **TypeScript**
-- **TenserFlow.js**
+- **TensorFlow.js**
 - **face-api.js**
 - **NgRx**
 - **BootStrap**
