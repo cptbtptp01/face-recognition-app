@@ -81,13 +81,6 @@
   .status-icon {
     @extend .me-2;
   }
-
-  .dots::after {
-    display: inline-block;
-    animation: dots 1.5s linear infinite;
-    content: '';
-    width: 24px;
-  }
 }
 
 .webcam-controls {

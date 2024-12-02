@@ -5,6 +5,7 @@ export interface DetectionStatus {
   success: boolean;
   message: string;
   timestamp: number;
+  isModelLoaded?: boolean;
 }
 
 /**
