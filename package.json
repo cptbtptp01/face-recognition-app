@@ -11,7 +11,7 @@
     "lint:fix": "ng lint --fix && prettier --write .",
     "format": "prettier --write \"src/**/*.{ts,html,scss}\"",
     "format:check": "prettier --check \"src/**/*.{ts,html,scss}\"",
-    "heroku-postbuild": "npm install --legacy-peer-deps && ng build --configuration production"
+    "heroku-postbuild": "ng build --configuration production"
   },
   "private": true,
   "engines": {
