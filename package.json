@@ -11,10 +11,13 @@
     "lint:fix": "ng lint --fix && prettier --write .",
     "format": "prettier --write \"src/**/*.{ts,html,scss}\"",
     "format:check": "prettier --check \"src/**/*.{ts,html,scss}\"",
-    "heroku-postbuild": "ng build --configuration production",
-    "postinstall": "npm install --legacy-peer-deps"
+    "heroku-postbuild": "npm install --legacy-peer-deps && ng build --configuration production"
   },
   "private": true,
+  "engines": {
+    "node": "22.x",
+    "npm": "10.x"
+  },
   "dependencies": {
     "@angular/animations": "^19.0.0",
     "@angular/common": "^19.0.0",
