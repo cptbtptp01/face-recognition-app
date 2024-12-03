@@ -1,6 +1,6 @@
-# Face Detection Web App
+# Face Recognition App
 
-This is a web application to perform real-time face detection and analysis on both video streams (from the user's webcam) and static images.
+This is a web application to perform real-time face detection and analysis on both video streams (from the user's webcam) and image uploads.
 
 ## Key Features:
 
@@ -33,7 +33,7 @@ To run the application locally, follow these steps:
 2. Navigate to the project directory:
 
    ```
-   cd face-detection-web-app
+   cd face-recognition-app
    ```
 
 3. Install the dependencies:
