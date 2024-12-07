@@ -1,7 +1,7 @@
 <div class="webcam-container">
   <div class="feed-content">
     <video
-      #video
+      #video autoplay muted playsinline
       [width]="dimensions.width"
       [height]="dimensions.height"
       [class.hidden]="!(isStreaming$ | async)"
