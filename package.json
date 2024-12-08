@@ -15,8 +15,8 @@
   },
   "private": true,
   "engines": {
-    "node": "22.x",
-    "npm": "10.x"
+    "node": ">=20.x",
+    "npm": ">=10.x"
   },
   "dependencies": {
     "@angular/animations": "^19.0.0",
@@ -32,6 +32,7 @@
     "@ngrx/store": "^18.1.1",
     "@ngrx/store-devtools": "^18.1.1",
     "bootstrap": "^5.3.3",
+    "d3": "^7.9.0",
     "express": "^4.21.1",
     "face-api.js": "^0.22.2",
     "rxjs": "~7.8.0",
@@ -46,6 +47,7 @@
     "@angular-eslint/template-parser": "^19.0.0",
     "@angular/cli": "^19.0.2",
     "@angular/compiler-cli": "^19.0.0",
+    "@types/d3": "^7.4.3",
     "@types/jasmine": "~5.1.0",
     "@typescript-eslint/eslint-plugin": "^8.16.0",
     "@typescript-eslint/parser": "^8.16.0",

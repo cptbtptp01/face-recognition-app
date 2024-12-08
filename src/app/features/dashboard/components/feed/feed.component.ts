@@ -7,12 +7,14 @@ import { UploadService } from '../../../../core/services/upload.service';
 import { Store } from '@ngrx/store';
 import {
   selectDetectionStatus,
+  selectGenderCount,
   selectImageUrl,
+  selectIsModelLoaded,
   selectIsStreaming,
 } from '../../../../core/store/selectors/app.selectors';
 import { first, Observable } from 'rxjs';
 import * as AppActions from '../../../../core/store/actions/app.actions';
-import { DetectionStatus } from '../../../../core/store/state/app.state';
+import { DetectionStatus, GenderCount } from '../../../../core/store/state/app.state';
 
 /**
  * Manage source (video, image), perform face detection.
@@ -37,6 +39,7 @@ export class FeedComponent implements OnInit, OnDestroy {
   isStreaming$: Observable<boolean>;
   imageUrl$: Observable<string | null>;
   detectionStatus$: Observable<DetectionStatus | null>;
+  genderCount$: Observable<GenderCount>;
 
   constructor(
     private store: Store,
@@ -47,6 +50,7 @@ export class FeedComponent implements OnInit, OnDestroy {
     this.isStreaming$ = this.store.select(selectIsStreaming);
     this.imageUrl$ = this.store.select(selectImageUrl);
     this.detectionStatus$ = this.store.select(selectDetectionStatus);
+    this.genderCount$ = this.store.select(selectGenderCount);
   }
 
   async ngOnInit(): Promise<void> {
@@ -106,7 +110,7 @@ export class FeedComponent implements OnInit, OnDestroy {
   stopWebcam(): void {
     this.webcamService.stopWebcam(this.video.nativeElement);
     this.store.dispatch(AppActions.stopWebcam());
-    this.recognitionService.stopFaceDetection();
+    this.store.dispatch(AppActions.resetGenderCount());
     this.clearOverlay();
   }
 
@@ -169,15 +173,21 @@ export class FeedComponent implements OnInit, OnDestroy {
       });
     } catch (error) {
       console.error('Error uploading image:', error);
-      this.store.dispatch(
-        AppActions.setDetectionStatus({
-          status: {
-            success: false,
-            message: 'Failed to upload image',
-            timestamp: Date.now(),
-          },
-        })
-      );
+      this.store
+        .select(selectIsModelLoaded)
+        .pipe(first())
+        .subscribe(isModelLoaded => {
+          this.store.dispatch(
+            AppActions.setDetectionStatus({
+              status: {
+                success: false,
+                message: 'Failed to upload image',
+                timestamp: Date.now(),
+                isModelLoaded: isModelLoaded,
+              },
+            })
+          );
+        });
     }
   }
 
@@ -196,11 +206,11 @@ export class FeedComponent implements OnInit, OnDestroy {
     }
 
     this.clearOverlay();
-    this.store.dispatch(AppActions.clearDetectionStatus());
+    this.store.dispatch(AppActions.resetGenderCount());
   }
 
   ngOnDestroy(): void {
     this.stopWebcam();
-    this.store.dispatch(AppActions.clearDetectionStatus());
+    // this.recognitionService.stopFaceDetection();
   }
 }
