@@ -1,0 +1,106 @@
+<div class="webcam-container">
+  <div class="feed-content">
+    <video
+      #video
+      autoplay
+      muted
+      playsinline
+      [width]="dimensions.width"
+      [height]="dimensions.height"
+      [class.hidden]="!(isStreaming$ | async)"
+    ></video>
+
+    <img
+      #image
+      [width]="dimensions.width"
+      [height]="dimensions.height"
+      (load)="onImageLoad($event)"
+      [class.hidden]="!(imageUrl$ | async)"
+    />
+
+    <canvas #overlay></canvas>
+
+    <div class="placeholder" *ngIf="!(isStreaming$ | async) && !(imageUrl$ | async)">
+      <div class="text-center">
+        <i class="bi bi-camera"></i>
+        <p>Start camera or upload an image to begin</p>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="detectionStatus$ | async as $status">
+    <div class="status-bar">
+      <div class="status-item" [ngClass]="{ 'text-success': $status.isModelLoaded }">
+        <i
+          class="status-icon"
+          [ngClass]="{
+            'bi-check-circle': $status.isModelLoaded,
+            'bi-exclamation-circle': !$status.isModelLoaded,
+            'text-success': $status.isModelLoaded,
+            'text-warning': !$status.isModelLoaded,
+          }"
+        ></i>
+        <span>model status</span>
+      </div>
+
+      <div class="status-item" [ngClass]="{ 'text-success': $status.success }">
+        <i
+          class="status-icon"
+          [ngClass]="{
+            'bi-check-circle': $status.success,
+            'bi-exclamation-circle': !$status.success,
+            'text-success': $status.success,
+            'text-warning': !$status.success,
+          }"
+        ></i>
+        <span>source status</span>
+      </div>
+
+      <ng-container *ngIf="genderCount$ | async as $count">
+        <div class="status-item" [ngClass]="{ 'text-success': $count.female + $count.male > 0 }">
+          <i
+            class="status-icon bi bi-circle"
+            [ngClass]="{ 'text-success': $count.female + $count.male > 0 }"
+          ></i>
+          <span>faces: {{ $count.female + $count.male }}</span>
+        </div>
+
+        <div class="status-item" [ngClass]="{ 'text-success': $count.female > 0 }">
+          <i class="status-icon bi bi-circle" [ngClass]="{ 'text-success': $count.female > 0 }"></i>
+          <span>female: {{ $count.female }}</span>
+        </div>
+
+        <div class="status-item" [ngClass]="{ 'text-success': $count.male > 0 }">
+          <i class="status-icon bi bi-circle" [ngClass]="{ 'text-success': $count.male > 0 }"></i>
+          <span>male: {{ $count.male }}</span>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+
+  <div class="webcam-controls">
+    <button
+      class="btn"
+      [ngClass]="(isStreaming$ | async) ? 'btn-danger' : 'btn-primary'"
+      (click)="toggleWebcam()"
+    >
+      <i
+        class="bi me-1"
+        [ngClass]="(isStreaming$ | async) ? 'bi-camera-video-off' : 'bi-camera-video'"
+      ></i>
+      {{ (isStreaming$ | async) ? 'Stop Camera' : 'Start Camera' }}
+    </button>
+
+    <button class="btn btn-secondary" (click)="triggerFileInput()">
+      <i class="bi bi-upload me-1"></i>
+      Upload Image
+    </button>
+
+    <button class="btn btn-outline-danger" *ngIf="imageUrl$ | async" (click)="clearImage()">
+      <i class="bi bi-x-lg me-1"></i>
+      Clear
+    </button>
+  </div>
+
+  <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*" class="d-none" />
+</div>

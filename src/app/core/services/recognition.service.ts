@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as faceapi from 'face-api.js';
 import * as AppActions from '../store/actions/app.actions';
+import { selectGenderCount } from '../store/selectors/app.selectors';
+import { first } from 'rxjs';
+import { GenderCount } from '../store/state/app.state';
 
 /**
  * Service handle face detections
@@ -13,6 +16,7 @@ export class RecognitionService {
   private modelsLoaded = false;
   private detectInterval: any;
   private readonly MIN_PROBABILITY = 0.05;
+  private currentGenderCount: GenderCount = { female: 0, male: 0 };
 
   private readonly EXPRESSION_ORDER = [
     'neutral',
@@ -24,7 +28,14 @@ export class RecognitionService {
     'surprised',
   ] as const;
 
-  constructor(private store: Store) {}
+  constructor(private store: Store) {
+    this.store
+      .select(selectGenderCount)
+      .pipe(first())
+      .subscribe(count => {
+        this.currentGenderCount = { ...count };
+      });
+  }
 
   /**
    * Loads the face detection models if they are not already loaded.
@@ -68,6 +79,7 @@ export class RecognitionService {
     const dims = this.setupCanvas(video, overlay);
     this.detectInterval = setInterval(async () => {
       await this.drawDetections(video, overlay, dims);
+      // TODO draw data viz
     }, 500);
   }
 
@@ -95,6 +107,7 @@ export class RecognitionService {
       this.detectInterval = null;
     }
     this.store.dispatch(AppActions.clearDetectionStatus());
+    this.resetGenderTracking();
   }
 
   /**
@@ -133,7 +146,7 @@ export class RecognitionService {
         this.updateDetectionStatus(false, 'No faces detected in the image', true);
         return [];
       }
-      this.updateDetectionStatus(true, `Detected ${detections.length} face(s)`, true);
+      this.updateDetectionStatus(true, `Detected Face Count: ${detections.length}`, true);
       return detections;
     } catch (error) {
       this.updateDetectionStatus(false, 'Error during face detection', true);
@@ -183,26 +196,43 @@ export class RecognitionService {
   ) {
     const detections = await this.detectFaces(source);
 
+    const sessionGenderCount = { ...this.currentGenderCount };
+
     const context = overlay.getContext('2d');
     if (context) {
       context.clearRect(0, 0, overlay.width, overlay.height);
+
       if (detections.length > 0) {
+        // fit the source dimensions
         const resizedDetections = faceapi.resizeResults(detections, dims);
-        faceapi.draw.drawDetections(overlay, resizedDetections);
 
+        // Draw each detection
         resizedDetections.forEach(detection => {
-          const { expressionValues } = this.getDominantExpression(detection.expressions);
-          const modifiedDetection = {
-            ...detection,
-            expressions: new faceapi.FaceExpressions(expressionValues),
-          };
+          const { age, gender, genderProbability, expressions } = detection;
+          const { expression, probability } = this.getDominantExpression(expressions);
 
-          faceapi.draw.drawFaceExpressions(overlay, [modifiedDetection], this.MIN_PROBABILITY);
-          const box = detection.detection.box;
-          const drawBox = new faceapi.draw.DrawBox(box, {
-            label: `Age: ${Math.round(detection.age)} Gender: ${detection.gender}`,
-          });
-          drawBox.draw(overlay);
+          faceapi.draw.drawDetections(overlay, detection);
+
+          this.store.dispatch(AppActions.incrementGenderCount({ gender }));
+          sessionGenderCount[gender]++;
+          this.store.dispatch(
+            AppActions.updateGenderCount({
+              counts: { female: sessionGenderCount.female, male: sessionGenderCount.male },
+            })
+          );
+
+          const text = [
+            `${gender}_${sessionGenderCount[gender]} (${genderProbability.toFixed(2)})`,
+            `Age: ${Math.round(age)} yrs`,
+            `${expression} (${probability.toFixed(2)})`,
+          ];
+          const anchor = detection.detection.box.bottomLeft;
+          const textOptions = {
+            anchorPosition: faceapi.draw.AnchorPosition.TOP_LEFT,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          };
+          const drawText = new faceapi.draw.DrawTextField(text, anchor, textOptions);
+          drawText.draw(overlay);
         });
       }
     }
@@ -228,5 +258,12 @@ export class RecognitionService {
         },
       })
     );
+  }
+  /**
+   * Reset gender tracking
+   */
+  private resetGenderTracking() {
+    this.store.dispatch(AppActions.resetGenderCount());
+    this.currentGenderCount = { female: 0, male: 0 };
   }
 }

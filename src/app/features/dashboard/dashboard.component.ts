@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FeedComponent } from './components/webcam/feed.component';
+import { FeedComponent } from './components/feed/feed.component';
 import { Store } from '@ngrx/store';
 
 /**
